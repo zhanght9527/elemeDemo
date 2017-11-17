@@ -1,0 +1,25 @@
+html,body
+  line-height: 1
+  font-family: 'PingFang SC','Microsoft YaHei',arial,sans-serif
+
+.clearfix
+  display inline-block
+  &:after
+    display block
+    content ' '
+    height 0
+    line-height 0
+    clear both
+    visibility hidden
+
+@media (-webkit-min-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5)
+  .border-1px
+    &::after
+      transform: scaleY(0.7)
+      -webkit-transform: scaleY(0.7)
+
+@media (-webkit-min-device-pixel-ratio: 2),(min-device-pixel-ratio: 2)
+  .border-1px
+    &::after
+      transform: scaleY(0.5)
+      -webkit-transform: scaleY(0.5)
