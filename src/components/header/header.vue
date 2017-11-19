@@ -1,10 +1,13 @@
 <template>
   <div class="header">
     <div class="content-wrapper">
+      <!-- 头部头像 -->
       <div class="avatar">
         <img :src="seller.avatar">
       </div>
+      <!-- 头部内容 -->
       <div class="content">
+        <!-- 头部标题 -->
         <div class="title">
           <span class="brand"></span>
           <span class="name">{{seller.name}}</span>
@@ -16,48 +19,59 @@
           <span class="icon" :class="classMap[seller.supports[0].type]"></span>
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
+        <!-- 右侧可点击总共几个优惠 -->
         <div v-if="seller.supports" class="support-count" @click="showDetail">
           <span class="count">{{seller.supports.length}}个</span>
           <i class="ele-keyboard_arrow_right"></i>
         </div>
       </div>
     </div>
+    <!-- 公告 -->
     <div class="bulletin-wrapper">
       <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
       <i class="ele-keyboard_arrow_right"></i>
     </div>
+    <!-- 头部背景 -->
     <div class="background">
       <img :src="seller.avatar" width='100%' height="100%">
     </div>
+    <!-- 浮框整体 -->
     <transition name="fade">
       <div v-show="detailShow" class="detail">
         <div class="detail-wrapper">
           <div class="detail-main">
+            <!-- 浮框大标题 -->
             <h1 class="name">{{seller.name}}</h1>
+            <!-- 评星 -->
             <div class="star-wrapper">
               <star :size="48" :score="seller.score"></star>
             </div>
+            <!-- 小标题 -->
             <div class="title">
               <div class="line"></div>
               <div class="text">优惠信息</div>
               <div class="line"></div>
             </div>
+            <!-- 循环优惠 -->
             <ul v-if="seller.supports" class="supports">
               <li class="support-item" v-for="(item,$index) in seller.supports">
                 <span class="icon" :class="classMap[seller.supports[$index].type]"></span>
                 <span class="text">{{seller.supports[$index].description}}</span>
               </li>
             </ul>
+            <!-- 小标题 -->
             <div class="title">
               <div class="line"></div>
               <div class="text">商家公告</div>
               <div class="line"></div>
             </div>
+            <!-- 商家公告 -->
             <div class="bulletin">
               <p class="content">{{seller.bulletin}}</p>
             </div>
           </div>
         </div>
+        <!-- 关闭按钮 -->
         <div class="detail-close" @click="closeDetail">
           <i class="ele-close"></i>
         </div>
