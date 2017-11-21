@@ -29,6 +29,9 @@
                   <span class="now"><span class="sign">￥</span>{{food.price}}</span>
                   <s v-show="food.oldPrice" class="old"><span class="sign">￥</span>{{food.oldPrice}}&nbsp;</s>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol :food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
@@ -42,6 +45,7 @@
 <script>
 import BScroll from 'better-scroll'
 import shopcart from '../shopcart/shopcart'
+import cartcontrol from '../cartcontrol/cartcontrol'
 const ERR_OK = 0
 export default {
   props: {
@@ -89,14 +93,14 @@ export default {
       let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook')
       let el = foodList[index]
       this.foodsScroll.scrollToElement(el, 300)
-      // console.log(el)
     },
     _initScroll () {
       this.menuScroll = new BScroll(this.$refs.menuWrapper, {
         click: true
       })
       this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
-        probeType: 3
+        probeType: 3,
+        click: true
       })
       this.foodsScroll.on('scroll', (pos) => {
         this.scrollY = Math.abs(Math.round(pos.y))
@@ -114,7 +118,8 @@ export default {
     }
   },
   components: {
-    shopcart
+    shopcart,
+    cartcontrol
   }
 }
 </script>
@@ -230,4 +235,8 @@ style <style lang="stylus" scoped>
               .sign
                 font-size 10px
                 font-weight normal
+            .cartcontrol-wrapper
+              position absolute
+              right 0
+              bottom 0.12rem
 </style>
