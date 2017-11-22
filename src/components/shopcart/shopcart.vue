@@ -17,11 +17,34 @@
         </div>
       </div>
     </div>
+    <div class="ball-container">
+      <transition name="drop">
+        <div v-for="ball in balls" v-show="ball.show" class="ball">
+          <div class="inner"></div>
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      balls: [{
+        show: false
+      }, {
+        show: false
+      }, {
+        show: false
+      }, {
+        show: false
+      }, {
+        show: false
+      }
+      ]
+    }
+  },
   props: {
     deliveryPrice: {
       type: Number,
@@ -34,11 +57,16 @@ export default {
     selectFoods: {
       type: Array,
       default () {
-        return [{
-          count: 2,
-          price: 10
-        }]
+        return []
       }
+    }
+  },
+  created () {
+    this.$root.eventHub.$on('cart.add', this.drop)
+  },
+  methods: {
+    drop (el) {
+      console.log(el)
     }
   },
   computed: {
@@ -164,4 +192,15 @@ export default {
           &.enough
             background #00b43c
             color #ffffff
+    .ball-container
+      .ball
+        position fixed
+        left 0.64rem
+        bottom 0.44rem
+        z-index 200
+        transition all 0.4s
+        .inner
+          width 0.32rem
+          height 0.32rem
+          border-radius 50%
 </style>

@@ -28,9 +28,10 @@ export default {
       } else {
         this.food.count++
       }
+      this.$root.eventHub.$emit('cart.add', event.target)
     },
     decreaseCart (event) {
-      if (!event._constructed) {
+      if (!event._constructed || !this.food.count) {
         return
       }
       this.food.count--
@@ -40,42 +41,37 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .cartcontrol
-    font-size 0
-    .cart-decrease
+.cartcontrol
+  font-size 0
+  .cart-decrease
+    display inline-block
+    padding 0.1rem
+    transition: 0.4s all linear
+    .inner
       display inline-block
-      padding 0.1rem
-      transition: 0.4s all linear
-      .inner
-        display inline-block
-        line-height 24px
-        font-size 24px
-        color rgb(0,160,220)
-        transition: 0.4s all linear
-      &.fadeRotate-enter-active, &.fadeRotate-leave-active
-        transform translate3d(0,0,0)
-        .inner
-          display inline-block
-          transform rotate(0)
-      &.fadeRotate-enter, &.fadeRotate-leave-active
-        opacity: 0
-        transform translate3d(0.48rem,0,0)
-        .inner
-          transform rotate(180deg)
-    .cart-count
-      display inline-block
-      vertical-align top
-      width 0.24rem
-      padding-top 0.12rem
-      line-height 24px
-      text-align center
-      font-size 10px
-      color rgb(147,153,159)
-    .cart-add
-      display inline-block
-      padding 0.1rem
       line-height 24px
       font-size 24px
       color rgb(0,160,220)
+      transition: 0.4s all linear
+    &.move-enter, &.move-leave-active
+      opacity: 0
+      transform translate3d(0.48rem,0,0)
+      .inner
+        transform rotate(180deg)
+  .cart-count
+    display inline-block
+    vertical-align top
+    width 0.24rem
+    padding-top 0.12rem
+    line-height 24px
+    text-align center
+    font-size 10px
+    color rgb(147,153,159)
+  .cart-add
+    display inline-block
+    padding 0.1rem
+    line-height 24px
+    font-size 24px
+    color rgb(0,160,220)
 </style>
 
