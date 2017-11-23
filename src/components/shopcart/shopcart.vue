@@ -1,6 +1,6 @@
 <template>
   <div class="shopcart">
-    <div class="content">
+    <div class="content" @click="toggleList">
       <div class="content-left">
         <div class="logo-wrapper">
           <div class="logo" :class="{'highLight':totalCount > 0}">
@@ -18,16 +18,38 @@
       </div>
     </div>
     <div class="ball-container">
-      <transition name="drop">
-        <div v-for="ball in balls" v-show="ball.show" class="ball">
-          <div class="inner"></div>
-        </div>
-      </transition>
+      <div v-for="(ball,index) in balls">
+        <transition name="drop" @before-enter='beforeEnter' @enter='enter' @after-enter='afterEnter'>
+          <div v-show="ball.show" class="ball">
+            <div class="inner inner-hook"></div>
+          </div>
+        </transition>
+      </div>
+    </div>
+    <div class="shopcart-list" v-show="listShow">
+      <div class="list-header">
+        <h1 class="title">购物车</h1>
+        <span class="empty">清空</span>
+      </div>
+      <div class="list-content">
+        <ul>
+          <li class="food" v-for="food in selectFoods">
+            <span class="name">{{food.name}}</span>
+            <div class="price">
+              <span>￥{{food.price*food.count}}</span>
+            </div>
+            <div class="cartcontrol-wrapper">
+              <cartcontrol :food='food'></cartcontrol>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import cartcontrol from '../cartcontrol/cartcontrol'
 export default {
   data () {
     return {
@@ -41,8 +63,9 @@ export default {
         show: false
       }, {
         show: false
-      }
-      ]
+      }],
+      dropBalls: [],
+      fold: true
     }
   },
   props: {
@@ -66,7 +89,57 @@ export default {
   },
   methods: {
     drop (el) {
-      console.log(el)
+      for (let i = 0; i < this.balls.length; i++) {
+        let ball = this.balls[i]
+        if (!ball.show) {
+          ball.show = true
+          ball.el = el
+          this.dropBalls.push(ball)
+          return
+        }
+      }
+    },
+    toggleList () {
+      if (!this.totalCount) {
+        return
+      }
+      this.fold = !this.fold
+    },
+    beforeEnter (el) {
+      let count = this.balls.length
+      while (count--) {
+        let ball = this.balls[count]
+        if (ball.show) {
+          let rect = ball.el.getBoundingClientRect()
+          let x = rect.left - 32
+          let y = -(window.innerHeight - rect.top - 22)
+          el.style.display = ''
+          el.style.webkitTransform = `translate3d(0, ${y}px, 0)`
+          el.style.Transform = `translate3d(0, ${y}px, 0)`
+          let inner = el.querySelector('.inner-hook')
+          inner.style.webkitTransform = `translate3d(${x}px, 0, 0)`
+          inner.style.transform = `translate3d(${x}px, 0, 0)`
+        }
+      }
+    },
+    enter (el) {
+      /* eslint-disable no-unused-vars */
+      // 触发浏览器重绘
+      let rf = el.offsetHeight
+      this.$nextTick(() => {
+        el.style.webkitTransform = 'translate3d(0, 0, 0)'
+        el.style.Transform = 'translate3d(0, 0, 0)'
+        let inner = el.querySelector('.inner-hook')
+        inner.style.webkitTransform = 'translate3d(0, 0, 0)'
+        inner.style.transform = 'translate3d(0, 0, 0)'
+      })
+    },
+    afterEnter (el) {
+      let ball = this.dropBalls.shift()
+      if (ball) {
+        ball.show = false
+        el.style.display = 'none'
+      }
     }
   },
   computed: {
@@ -100,7 +173,18 @@ export default {
       } else {
         return 'enough'
       }
+    },
+    listShow () {
+      if (!this.totalCount) {
+        this.fold = true
+        return false
+      }
+      let show = !this.fold
+      return show
     }
+  },
+  components: {
+    cartcontrol
   }
 }
 </script>
@@ -198,9 +282,17 @@ export default {
         left 0.64rem
         bottom 0.44rem
         z-index 200
-        transition all 0.4s
+        transition all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41)
         .inner
           width 0.32rem
           height 0.32rem
           border-radius 50%
+          background: rgb(0, 160, 220)
+          transition all 0.4s linear
+    .shopcart-list
+      position absolute
+      left 0
+      top 0
+      z-index -1
+      width 100%
 </style>

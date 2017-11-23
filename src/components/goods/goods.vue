@@ -38,7 +38,7 @@
         </li>
       </ul>
     </div>
-    <shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 
@@ -46,10 +46,8 @@
 import BScroll from 'better-scroll'
 import shopcart from '../shopcart/shopcart'
 import cartcontrol from '../cartcontrol/cartcontrol'
-import Vue from 'vue'
 
 const ERR_OK = 0
-const EventHub = new Vue()
 export default {
   props: {
     seller: {
@@ -100,6 +98,14 @@ export default {
     })
   },
   methods: {
+    // addFood (target) {
+    //   this._drop(target)
+    // },
+    // _drop (target) {
+    //   this.$nextTick(() => {
+    //     console.log(target)
+    //   })
+    // },
     selectMenu (index, event) {
       if (!event._constructed) {
         return

@@ -5,7 +5,6 @@ import App from './App'
 import VueResource from 'vue-resource'
 import router from './router'
 import './common/js/font'
-
 import './common/stylus/index.styl'
 
 Vue.config.productionTip = false
@@ -15,6 +14,10 @@ Vue.use(VueResource)
 new Vue({
   el: '#app',
   router,
+  // 新建一个vue实例，用来组件之间的传值
+  data: {
+    eventHub: new Vue()
+  },
   template: '<App/>',
   components: { App }
 })
