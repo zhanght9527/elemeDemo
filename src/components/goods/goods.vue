@@ -145,7 +145,7 @@ export default {
 }
 </script>
 
-style <style lang="stylus" scoped>
+<style lang="stylus" scoped>
   @import '../../common/stylus/mixin.styl'
   .goods
     display flex
