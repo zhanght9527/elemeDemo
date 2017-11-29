@@ -111,7 +111,7 @@ export default {
       color: rgb(147, 153, 159)
       font-size: 0
       &.on
-        .icon-check_circle
+        .ele-check_circle
           color: #00c850
       .ele-check_circle
         display: inline-block

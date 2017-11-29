@@ -34,10 +34,10 @@
           <split></split>
           <div class="rating">
             <h1 class="title">商品评价</h1>
-            <ratingselect :select-type='selectType' :only-content='onlyContent' :desc='desc' :ratings='food.ratings'></ratingselect>
+            <ratingselect @select="selectRating" @toggle="toggleContent" :select-type='selectType' :only-content='onlyContent' :desc='desc' :ratings='food.ratings'></ratingselect>
             <div class="rating-wrapper">
               <ul v-show="food.ratings && food.ratings.length">
-                <li class="rating-item" v-for="rating in food.ratings">
+                <li class="rating-item" v-show="needShow(rating.rateType,rating.text)" v-for="rating in food.ratings">
                   <div class="top-wrapper">
                     <div class="time">{{rating.rateTime | formatDate}}</div>
                     <div class="user">
@@ -68,8 +68,6 @@ import ratingselect from '../ratingselect/ratingselect'
 import Vue from 'vue'
 import {formatDate} from 'common/js/date'
 
-// const POSITIVE = 0
-// const NEGATIVE = 1
 const ALL = 2
 
 export default {
@@ -94,7 +92,7 @@ export default {
     show () {
       this.showFlag = true
       this.selectType = ALL
-      this.onlyContent = true
+      this.onlyContent = false
       this.$nextTick(() => {
         if (!this.scroll) {
           this.scroll = new BScroll(this.$refs.food, {
@@ -112,6 +110,28 @@ export default {
       }
       Vue.set(this.food, 'count', 1)
       this.$root.eventHub.$emit('cart.add', event.target)
+    },
+    needShow (type, text) {
+      if (this.onlyContent && !text) {
+        return false
+      }
+      if (this.selectType === ALL) {
+        return true
+      } else {
+        return type === this.selectType
+      }
+    },
+    selectRating (type) {
+      this.selectType = type
+      this.$nextTick(() => {
+        this.scroll.refresh()
+      })
+    },
+    toggleContent () {
+      this.onlyContent = !this.onlyContent
+      this.$nextTick(() => {
+        this.scroll.refresh()
+      })
     }
   },
   filters: {
@@ -243,8 +263,6 @@ export default {
         .rating-item
           border-1px(rgba(7,17,27,0.1))
           padding 0.32rem 0
-          &:last-of-type
-            border:none
           .top-wrapper
             display flex
             justify-content space-between
@@ -266,9 +284,12 @@ export default {
             font-size 12px
             line-height 16px
             span 
+              display inline-block
               line-height 16px
               &.ele-thumb_up
                 color rgb(0,160,220)
+                vertical-align middle
               &.ele-thumb_down
                 color rgb(147,153,159)
+                vertical-align middle
 </style>
