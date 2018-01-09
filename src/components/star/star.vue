@@ -51,10 +51,11 @@ export default {
       display inline-block
       background-repeat no-repeat
   &.star-24
+    height 10px
     .star-item  
       width 0.2rem
-      height 0.2rem
-      margin-right 0.1rem
+      height 10px
+      margin-right 0.05rem
       background-size 0.2rem 0.2rem
       vertical-align middle 
       &:last-child
@@ -66,10 +67,11 @@ export default {
       &.off
         bg-image('star24_off')
   &.star-36
+    height 15px
     .star-item  
       width 0.3rem
-      height 0.3rem
-      margin-right 0.22rem
+      height 15px
+      margin-right 0.1rem
       background-size 0.3rem 0.3rem
       vertical-align middle 
       &:last-child
@@ -81,10 +83,11 @@ export default {
       &.off
         bg-image('star36_off')
   &.star-48
+    height 20px
     .star-item  
       width 0.4rem
-      height 0.4rem
-      margin-right 0.44rem
+      height 20px
+      margin-right 0.2rem
       background-size 0.4rem 0.4rem
       vertical-align middle 
       &:last-child
