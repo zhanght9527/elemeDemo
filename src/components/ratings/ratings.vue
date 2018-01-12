@@ -62,6 +62,7 @@
   import ratingselect from '../ratingselect/ratingselect'
   import BScroll from 'better-scroll'
   import {formatDate} from 'common/js/date'
+  import food from '../food/food'
 
   const ALL = 2
   const ERR_OK = 0
@@ -131,7 +132,8 @@
     components: {
       star,
       ratingselect,
-      split
+      split,
+      food
     }
   }
 </script>
