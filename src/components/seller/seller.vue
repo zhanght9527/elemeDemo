@@ -67,6 +67,15 @@
           </div>
         </div>
       </div>
+      <split></split>
+      <div class="sellerInfo">
+        <div class="title">商家信息</div>
+        <ul>
+          <li class="infoLi" v-for="(info,index) in seller.infos">
+            {{seller.infos[index]}}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -98,6 +107,11 @@ export default {
         click: true
       })
     })
+    if (this.seller.pics) {
+      this.$nextTick(() => {
+        this._initPicScroll()
+      })
+    }
   },
   watch: {
     seller: '_initPicScroll'
@@ -105,17 +119,18 @@ export default {
   methods: {
     _initPicScroll () {
       if (this.seller) {
-        if (this.picsScroll) {
-          return
+        if (!this.picsScroll) {
+          const PIC_WIDTH = 120
+          const MARGIN = 10
+          let picLen = this.seller.pics.length
+          this.$refs.picList.style.width = PIC_WIDTH * picLen + MARGIN * (picLen - 1) + 'px'
+          this.$nextTick(() => {
+            this.picsScroll = new BScroll(this.$refs.picsWrapper, {
+              scrollX: true,
+              bounce: false
+            })
+          })
         }
-        const PIC_WIDTH = 120
-        const MARGIN = 6
-        let picLen = this.seller.pics.length
-        this.$refs.picList.style.width = PIC_WIDTH * picLen + MARGIN * (picLen - 1) + 'px'
-        console.log(this.$refs.picList)
-        this.picsScroll = new BScroll(this.$refs.picsWrapper, {
-          scrollX: true
-        })
       }
     }
   }
@@ -260,5 +275,24 @@ export default {
       .img-wrapper
         img
           vertical-align top
-          margin-right 6px
+          margin-right 5px
+          &:last-child
+            margin-right 0
+    .sellerInfo
+      padding 0 0.36rem
+      .title
+        font-size 14px
+        color rgb(7,17,27)
+        line-height 14px
+        padding 12px 0
+        border-1px(rgba(7,17,27,0.1))
+      .infoLi
+        padding 16px 0.24rem
+        font-size 12px
+        font-weight 200
+        color rgb(7,17,27)
+        line-height 16px
+        border-1px(rgba(7,17,27,0.1))
+        &:last-child
+          border-none()
 </style>
